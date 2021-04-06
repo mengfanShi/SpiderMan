@@ -12,7 +12,8 @@ Usage:
 """
 
 import logging
-import common
+# import common
+from common import common
 
 
 STYLE = {
@@ -58,9 +59,9 @@ STYLE = {
 
 
 def stylize(msg, fore='', back='', mode=''):
-    mode = '%s' % STYLE['mode'][mode] if STYLE['mode'].has_key(mode) else ''
-    fore = '%s' % STYLE['fore'][fore] if STYLE['fore'].has_key(fore) else ''
-    back = '%s' % STYLE['back'][back] if STYLE['back'].has_key(back) else ''
+    mode = '%s' % STYLE['mode'][mode] if mode in STYLE['mode'] else ''
+    fore = '%s' % STYLE['fore'][fore] if fore in STYLE['fore'] else ''
+    back = '%s' % STYLE['back'][back] if back in STYLE['back'] else ''
     style = ';'.join([s for s in [mode, fore, back] if s])
     style = '\033[%sm' % style if style else ''
     end = '\033[%sm' % STYLE['default']['end'] if style else ''

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import Queue
+import queue
 import collections
 import multiprocessing
 from multiprocessing.managers import BaseManager
@@ -20,8 +20,8 @@ class Master(object):
         :param authkey:
         """
         self.logger = log.Logger('Master')
-        self.task_queue = Queue.Queue()
-        self.link_queue = Queue.Queue()
+        self.task_queue = queue.Queue()
+        self.link_queue = queue.Queue()
         self._init_environment()
         self._init_checker()
         self.manager = BaseManager(address=address, authkey=authkey)
@@ -56,14 +56,14 @@ class Master(object):
                 for url in urls:
                     self.tasks.put(url)
                 self.logger.info('GET URLS: %s' % len(urls))
-            except Queue.Empty:
+            except queue.Empty:
                 self.logger.info('Waiting for URLS')
                 continue
 
 
 def test_master(url):
 
-    master = Master(('0.0.0.0', 23333), AUTH_KEY)
+    master = Master(('0.0.0.0', 2333), AUTH_KEY.encode('utf-8'))
     urls = [
         url
         # 'https://www.zhihu.com/question/26006703',
@@ -81,10 +81,10 @@ def test_master(url):
 
 
 if __name__ == '__main__':
-    multiprocessing.current_process().authkey = AUTH_KEY
+    multiprocessing.current_process().authkey = AUTH_KEY.encode('utf-8')
 
     print("Master is starting to run ....")
-    keyword = raw_input("Please enter a keyword to search:")
+    keyword = input("Please enter a keyword to search:")
 
     url = 'https://www.zhihu.com/search?type=content&q=%s' % keyword
     print("Your First URL is: %s" % url)
