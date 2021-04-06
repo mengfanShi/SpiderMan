@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import threading
-import Queue
+import queue
 from time import sleep
 
 
@@ -32,14 +32,14 @@ class SMThreadManager(object):
         :param max_threads: 最大线程数
         """
         self.max_threads = max_threads
-        self.task_queue = Queue.Queue()
+        self.task_queue = queue.Queue()
         self.threads = []
         self.func = func
         self._init_thread_pool()
 
     def _init_thread_pool(self):
 
-        for i in xrange(self.max_threads):
+        for i in range(self.max_threads):
 
             thread = SMThread(self.task_queue)
             thread.start()

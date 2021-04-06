@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import requests
-import cookielib
+import http.cookiejar
 import json
 import re
 import time
 import os.path
-# from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 try:
     from PIL import Image
 except:
@@ -27,7 +27,7 @@ class Login(object):
 
     def _init_session(self):
         self._session = requests.session()
-        self._session.cookies = cookielib.LWPCookieJar(filename='crawler/zhihucookie')
+        self._session.cookies = http.cookiejar.LWPCookieJar(filename='crawler/zhihucookie')
         try:
             self._session.cookies.load(ignore_discard=True)
         except:
@@ -38,17 +38,17 @@ class Login(object):
         if self.is_login():
             print('您已经登录')
         else:
-            account = raw_input('请输入你的用户名\n>  ')
-            secret = raw_input("请输入你的密码\n>  ")
+            account = input('请输入你的用户名\n>  ')
+            secret = input("请输入你的密码\n>  ")
             self.login(secret, account)
 
     def _get_xsrf(self):
         """
         _xsrf 是一个动态变化的参数
         """
-        index_url = 'https://www.zhihu.com/#signin'
+        index_url = 'https://www.zhihu.com'
         # 获取登录时需要用到的_xsrf
-        index_page = requests.get("https://www.zhihu.com/#signin", headers=headers)
+        index_page = requests.get(index_url, headers=headers)
         index_page.raise_for_status()
         index_page.encoding = index_page.apparent_encoding
         html = index_page.text
@@ -75,9 +75,9 @@ class Login(object):
         except:
             print(u'请到 %s 目录找到captcha.jpg 手动输入' % os.path.abspath('captcha.jpg'))
 
-        sig = raw_input('验证码类型，字符1，倒立汉字2:')
+        sig = input('验证码类型，字符1，倒立汉字2:')
         if sig == '1':
-            captcha = raw_input('请输入验证码：')
+            captcha = input('请输入验证码：')
         else:
             captcha = {
                 'img_size': [200, 44],
@@ -86,7 +86,7 @@ class Login(object):
             points = [[22.796875, 22], [42.796875, 22], [63.796875, 21], [84.796875, 20], [107.796875, 20],
                       [129.796875, 22],
                       [150.796875, 22]]
-            seq = raw_input('请输入倒立字的位置:')
+            seq = input('请输入倒立字的位置:')
             for i in seq:
                 captcha['input_points'].append(points[int(i) - 1])
             captcha = json.dumps(captcha)

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from Tkinter import *
-import tkMessageBox
+from tkinter import *
+from tkinter import messagebox
+# import tkMessageBox
 from threading import Thread
 
 from common import common
@@ -25,13 +26,13 @@ class LoginView(Frame):
         self.left_frame = Frame(self, width=130, height=100)
         self.right_frame = Frame(self, width=140, height=100)
 
-        self.server_label = Label(self.left_frame, text="服务器:",)
-        self.port = Label(self.left_frame, text="端口:",)
+        self.server_label = Label(self.left_frame, text=u"服务器:",)
+        self.port = Label(self.left_frame, text=u"端口:",)
         self.server_entry = Entry(self.right_frame, width=14)
 
         self.port_entry = Entry(self.right_frame, width=14)
-        self.distribute_button = Button(self.center_view, text="分布式", command=self.distribute, height=2, width=13)
-        self.single_button = Button(self.center_view, text="单机", command=self.single, height=2, width=13)
+        self.distribute_button = Button(self.center_view, text=u"分布式", command=self.distribute, height=2, width=13)
+        self.single_button = Button(self.center_view, text=u"单机", command=self.single, height=2, width=13)
         self.left_frame.propagate(0)
         self.right_frame.propagate(0)
         self.left_frame.grid(padx=2, pady=2, row=0, column=0)
@@ -76,7 +77,7 @@ class MainView(Frame):
 
         self.counter_text = Text(self, width=60, height=20)
         self.input_text = Text(self, width=60, height=10)
-        self.button = Button(self, text='情感分析', command=self.sentiment_button)
+        self.button = Button(self, text=u'情感分析', command=self.sentiment_button)
         self.logger.pack(side=LEFT, fill=BOTH)
         self.counter_text.pack(padx=5)
         self.input_text.pack(padx=5, pady=5)
@@ -116,14 +117,14 @@ class MainView(Frame):
         content = self.input_text.get("1.0", END)
         senti, prob = inference.inference(content)
         if senti:
-            tkMessageBox.showinfo('情感分析', '情感分析结果：正面，置信度：%s' % prob, parent=self.app.root)
+            messagebox.showinfo('情感分析', '情感分析结果：正面，置信度：%s' % prob, parent=self.app.root)
 
         else:
             if prob != 0:
-                tkMessageBox.showinfo('情感分析', '情感分析结果：负面，置信度：%s' % prob, parent=self.app.root)
+                messagebox.showinfo('情感分析', '情感分析结果：负面，置信度：%s' % prob, parent=self.app.root)
 
             else:
-                tkMessageBox.showinfo('情感分析', '情感分析结果：中性', parent=self.app.root)
+                messagebox.showinfo('情感分析', '情感分析结果：中性', parent=self.app.root)
         self.input_text.delete(0.0, END)
 
 
@@ -229,7 +230,7 @@ class Application(object):
         self.worker_thread.start()
 
     def on_closing(self):
-        if tkMessageBox.askyesno("Quit", "Do you want to quit?", parent=self.root):
+        if messagebox.askyesno("Quit", "Do you want to quit?", parent=self.root):
             self.worker.exit_app()
             self.root.destroy()
             exit(0)

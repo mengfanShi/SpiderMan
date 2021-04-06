@@ -15,7 +15,7 @@ import codecs
 import sqlite3
 
 from common import log
-from model import Question, Answer, Person, Topic
+from store.model import Question, Answer, Person, Topic
 
 DB_PATH = 'spiderman.db'
 

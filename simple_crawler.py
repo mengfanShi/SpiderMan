@@ -6,7 +6,7 @@ Simple Crawler
 单机线程版
 
 """
-import Queue
+import queue
 
 from common import log
 from store import store
@@ -29,7 +29,7 @@ class SpiderApplication(object):
         self.crawler_manager = smthread.SMThreadManager(max_threads=8, func=self._crawl)
         self.parser_manager = smthread.SMThreadManager(max_threads=2, func=self._parse)
         self.login = login.Login()
-        self.links_queue = Queue.Queue()
+        self.links_queue = queue.Queue()
         self._parser = parser
         self._crawler = cralwer
         self._checker = url_check.BloomFilter(item_count=10000, prob=0.01)
@@ -45,7 +45,7 @@ class SpiderApplication(object):
                 urls = url_check.check_urls(urls, self._checker)
                 for url in urls:
                     self.crawler_manager.do(url)
-            except Queue.Empty:
+            except queue.Empty:
                 continue
 
     def _parse(self, args):

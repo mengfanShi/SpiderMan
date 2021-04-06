@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-import cookielib
+import http.cookiejar
 import sys
 sys.path.append('../')
 from common import common
@@ -53,7 +53,7 @@ def get_html(url, keyword=""):
             driver.delete_all_cookies()
             try:
                 # 测试cookie
-                load_cookies = cookielib.LWPCookieJar()
+                load_cookies = http.cookiejar.LWPCookieJar()
                 load_cookies.load(filename='zhihucookie', ignore_discard=False, ignore_expires=False)
                 cookies = requests.utils.dict_from_cookiejar(load_cookies)
                 # print(cookies)

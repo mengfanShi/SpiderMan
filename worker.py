@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import Queue
+import queue
 import argparse
 import collections
 import multiprocessing
@@ -30,14 +30,14 @@ class Worker(object):
         else:
             self.logger = logger
         self.update_callback = update_callback
-        # self.task_queue = Queue.Queue()
-        # self.link_queue = Queue.Queue()
+        # self.task_queue = queue.Queue()
+        # self.link_queue = queue.Queue()
         self._init_environment()
         self.login = login.Login()
-        self._manager = BaseManager(address=config.address, authkey=config.authkey)
+        self._manager = BaseManager(address=config.address, authkey=config.authkey.encode('utf-8'))
         self.tasks = None
         self.links = None
-        self._content_queue = Queue.Queue()
+        self._content_queue = queue.Queue()
         self._crawler_func = crawler_func
         self._parser_func = parser_func
         self._start()
@@ -97,7 +97,7 @@ class Worker(object):
         self.parser_manager = smthread.SMThreadManager(max_threads=self._parser_threads, func=self._parse)
 
     def _start(self):
-        multiprocessing.current_process().authkey = AUTH_KEY
+        multiprocessing.current_process().authkey = AUTH_KEY.encode('utf-8')
         self._manager.connect()
         self.tasks = self._manager.get_task_queue()
         self.links = self._manager.get_link_queue()
@@ -111,7 +111,7 @@ class Worker(object):
             try:
                 url = self.tasks.get(timeout=1)
                 self.crawler_manager.do(url)
-            except Queue.Empty:
+            except queue.Empty:
                 self.logger.info('URL Queue is Empty now ...')
                 print("URL queue is empty now ....")
 
@@ -119,7 +119,7 @@ class Worker(object):
                 url_, content = self._content_queue.get(timeout=1)
                 self.parser_manager.do((url_, content))
 
-            except Queue.Empty:
+            except queue.Empty:
                 self.logger.info('Worker Content is Empty now ...')
 
     def exit_app(self):
